@@ -34,6 +34,8 @@ function SalesChannels() {
   const [selectedChannel, setSelectedChannel] = useState(null);
   const [modalActive, setModalActive] = useState(false);
   const [detailsModalActive, setDetailsModalActive] = useState(false);
+  const [deleteModalActive, setDeleteModalActive] = useState(false);
+  const [channelToDelete, setChannelToDelete] = useState(null);
   const [selectedTab, setSelectedTab] = useState(0);
   const [formData, setFormData] = useState({
     name: '',
@@ -84,17 +86,22 @@ function SalesChannels() {
   };
 
   const handleDelete = async (channelId) => {
-    if (!confirm('Are you sure you want to delete this sales channel?')) return;
-    
     try {
       await fetchWithAuth(`/api/sales-channels/${channelId}`, {
         method: 'DELETE'
       });
       setSuccess('Sales channel deleted');
+      setDeleteModalActive(false);
+      setChannelToDelete(null);
       loadChannels();
     } catch (err) {
       setError('Failed to delete sales channel');
     }
+  };
+
+  const openDeleteModal = (channel) => {
+    setChannelToDelete(channel);
+    setDeleteModalActive(true);
   };
 
   const handleViewDetails = async (channel) => {
@@ -225,7 +232,7 @@ function SalesChannels() {
                               icon={DeleteIcon}
                               onClick={(e) => {
                                 e.stopPropagation();
-                                handleDelete(id);
+                                openDeleteModal(channel);
                               }}
                             />
                           </InlineStack>
@@ -434,6 +441,37 @@ function SalesChannels() {
             </BlockStack>
           </Modal.Section>
         )}
+      </Modal>
+
+      {/* Delete Confirmation Modal */}
+      <Modal
+        open={deleteModalActive}
+        onClose={() => {
+          setDeleteModalActive(false);
+          setChannelToDelete(null);
+        }}
+        title="Delete Sales Channel"
+        primaryAction={{
+          content: 'Delete',
+          destructive: true,
+          onAction: () => handleDelete(channelToDelete?.id)
+        }}
+        secondaryActions={[
+          {
+            content: 'Cancel',
+            onAction: () => {
+              setDeleteModalActive(false);
+              setChannelToDelete(null);
+            }
+          }
+        ]}
+      >
+        <Modal.Section>
+          <Text>
+            Are you sure you want to delete the sales channel "{channelToDelete?.name}"? 
+            This action cannot be undone and will remove all associated catalog and tenant links.
+          </Text>
+        </Modal.Section>
       </Modal>
     </Page>
   );

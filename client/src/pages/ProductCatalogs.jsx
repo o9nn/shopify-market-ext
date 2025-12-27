@@ -31,6 +31,8 @@ function ProductCatalogs() {
   const [catalogs, setCatalogs] = useState([]);
   const [selectedCatalog, setSelectedCatalog] = useState(null);
   const [modalActive, setModalActive] = useState(false);
+  const [deleteModalActive, setDeleteModalActive] = useState(false);
+  const [catalogToDelete, setCatalogToDelete] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -83,17 +85,22 @@ function ProductCatalogs() {
   };
 
   const handleDelete = async (catalogId) => {
-    if (!confirm('Are you sure you want to delete this product catalog?')) return;
-    
     try {
       await fetchWithAuth(`/api/product-catalogs/${catalogId}`, {
         method: 'DELETE'
       });
       setSuccess('Product catalog deleted');
+      setDeleteModalActive(false);
+      setCatalogToDelete(null);
       loadCatalogs();
     } catch (err) {
       setError('Failed to delete product catalog');
     }
+  };
+
+  const openDeleteModal = (catalog) => {
+    setCatalogToDelete(catalog);
+    setDeleteModalActive(true);
   };
 
   const handleEdit = (catalog) => {
@@ -220,7 +227,7 @@ function ProductCatalogs() {
                               size="slim"
                               tone="critical"
                               icon={DeleteIcon}
-                              onClick={() => handleDelete(id)}
+                              onClick={() => openDeleteModal(catalog)}
                             />
                           </InlineStack>
                         </InlineStack>
@@ -371,6 +378,37 @@ function ProductCatalogs() {
               />
             </BlockStack>
           </FormLayout>
+        </Modal.Section>
+      </Modal>
+
+      {/* Delete Confirmation Modal */}
+      <Modal
+        open={deleteModalActive}
+        onClose={() => {
+          setDeleteModalActive(false);
+          setCatalogToDelete(null);
+        }}
+        title="Delete Product Catalog"
+        primaryAction={{
+          content: 'Delete',
+          destructive: true,
+          onAction: () => handleDelete(catalogToDelete?.id)
+        }}
+        secondaryActions={[
+          {
+            content: 'Cancel',
+            onAction: () => {
+              setDeleteModalActive(false);
+              setCatalogToDelete(null);
+            }
+          }
+        ]}
+      >
+        <Modal.Section>
+          <Text>
+            Are you sure you want to delete the product catalog "{catalogToDelete?.name}"? 
+            This action cannot be undone and will remove all associated channel links.
+          </Text>
         </Modal.Section>
       </Modal>
     </Page>
