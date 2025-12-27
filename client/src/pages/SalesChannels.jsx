@@ -21,7 +21,7 @@ import {
   Icon
 } from '@shopify/polaris';
 import { 
-  CirclePlusIcon, 
+  PlusCircleIcon, 
   EditIcon, 
   DeleteIcon,
   SettingsIcon 
@@ -159,7 +159,7 @@ function SalesChannels() {
       subtitle="Manage custom sales channels and their configurations"
       primaryAction={{
         content: 'Create Channel',
-        icon: CirclePlusIcon,
+        icon: PlusCircleIcon,
         onAction: () => {
           resetForm();
           setModalActive(true);

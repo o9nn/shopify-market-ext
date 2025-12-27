@@ -19,7 +19,7 @@ import {
   Icon
 } from '@shopify/polaris';
 import { 
-  CirclePlusIcon, 
+  PlusCircleIcon, 
   EditIcon, 
   DeleteIcon,
   ProductIcon 
@@ -161,7 +161,7 @@ function ProductCatalogs() {
       subtitle="Manage product groupings for your sales channels"
       primaryAction={{
         content: 'Create Catalog',
-        icon: CirclePlusIcon,
+        icon: PlusCircleIcon,
         onAction: () => {
           resetForm();
           setModalActive(true);

@@ -62,7 +62,7 @@ router.get('/connections/:id', async (req, res, next) => {
  */
 router.post('/connections', async (req, res, next) => {
   try {
-    const { marketplace, marketplaceAccountId, credentials, settings } = req.body;
+    const { marketplace, marketplaceAccountId, credentials, settings, salesChannelId } = req.body;
     
     if (!marketplace) {
       return res.status(400).json({ error: 'Marketplace type is required' });
@@ -92,6 +92,7 @@ router.post('/connections', async (req, res, next) => {
         syncPrices: true,
         syncOrders: true
       },
+      salesChannelId: salesChannelId || null,
       status: 'pending'
     });
     
@@ -108,7 +109,7 @@ router.post('/connections', async (req, res, next) => {
 router.put('/connections/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { credentials, settings, status } = req.body;
+    const { credentials, settings, status, salesChannelId } = req.body;
     
     const connection = await MarketplaceConnection.findOne({
       where: { id, shopId: req.shop.id }
@@ -122,6 +123,7 @@ router.put('/connections/:id', async (req, res, next) => {
     if (credentials) updates.credentials = { ...connection.credentials, ...credentials };
     if (settings) updates.settings = { ...connection.settings, ...settings };
     if (status) updates.status = status;
+    if (salesChannelId !== undefined) updates.salesChannelId = salesChannelId;
     
     await connection.update(updates);
     res.json(connection);
