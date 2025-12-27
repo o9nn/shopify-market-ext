@@ -6,7 +6,9 @@ import {
   ProductIcon,
   OrderIcon,
   StoreIcon,
-  SettingsIcon
+  SettingsIcon,
+  ChannelsIcon,
+  CollectionIcon
 } from '@shopify/polaris-icons';
 
 function Navigation() {
@@ -42,6 +44,23 @@ function Navigation() {
             icon: StoreIcon,
             selected: isSelected('/marketplaces'),
             onClick: () => navigate('/marketplaces')
+          }
+        ]}
+      />
+      <PolarisNavigation.Section
+        title="Configuration"
+        items={[
+          {
+            label: 'Sales Channels',
+            icon: ChannelsIcon,
+            selected: isSelected('/sales-channels'),
+            onClick: () => navigate('/sales-channels')
+          },
+          {
+            label: 'Product Catalogs',
+            icon: CollectionIcon,
+            selected: isSelected('/product-catalogs'),
+            onClick: () => navigate('/product-catalogs')
           },
           {
             label: 'Settings',

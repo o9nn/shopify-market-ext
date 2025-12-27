@@ -25,7 +25,11 @@ function Settings() {
     roundPrices: true,
     notifyOnNewOrder: true,
     notifyOnLowStock: true,
-    lowStockThreshold: '10'
+    lowStockThreshold: '10',
+    // Sales channel settings
+    enableSalesChannels: true,
+    defaultChannelPriority: '0',
+    catalogSyncMode: 'automatic'
   });
   const [saved, setSaved] = useState(false);
 
@@ -126,6 +130,45 @@ function Settings() {
                 label="Round prices to nearest .99"
                 checked={settings.roundPrices}
                 onChange={handleChange('roundPrices')}
+              />
+            </FormLayout>
+          </Card>
+        </Layout.AnnotatedSection>
+
+        {/* Sales Channel Settings */}
+        <Layout.AnnotatedSection
+          title="Sales Channel Configuration"
+          description="Configure advanced sales channel and catalog management options."
+        >
+          <Card>
+            <FormLayout>
+              <Checkbox
+                label="Enable advanced sales channel management"
+                checked={settings.enableSalesChannels}
+                onChange={handleChange('enableSalesChannels')}
+                helpText="Use custom sales channels to manage marketplace connections with catalog-based configurations"
+              />
+              
+              <TextField
+                label="Default channel priority"
+                type="number"
+                value={settings.defaultChannelPriority}
+                onChange={handleChange('defaultChannelPriority')}
+                disabled={!settings.enableSalesChannels}
+                helpText="Higher priority channels are synced first (0-100)"
+              />
+              
+              <Select
+                label="Catalog sync mode"
+                options={[
+                  { label: 'Automatic (sync on changes)', value: 'automatic' },
+                  { label: 'Manual (sync on demand)', value: 'manual' },
+                  { label: 'Scheduled (sync at intervals)', value: 'scheduled' }
+                ]}
+                value={settings.catalogSyncMode}
+                onChange={handleChange('catalogSyncMode')}
+                disabled={!settings.enableSalesChannels}
+                helpText="Control when product catalogs sync to sales channels"
               />
             </FormLayout>
           </Card>

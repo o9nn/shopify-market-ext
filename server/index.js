@@ -11,6 +11,8 @@ const productRoutes = require('./routes/products');
 const orderRoutes = require('./routes/orders');
 const marketplaceRoutes = require('./routes/marketplace');
 const webhookRoutes = require('./routes/webhooks');
+const salesChannelRoutes = require('./routes/salesChannels');
+const productCatalogRoutes = require('./routes/productCatalogs');
 const db = require('./models');
 
 const app = express();
@@ -37,6 +39,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/products', verifyRequest, productRoutes);
 app.use('/api/orders', verifyRequest, orderRoutes);
 app.use('/api/marketplace', verifyRequest, marketplaceRoutes);
+app.use('/api/sales-channels', verifyRequest, salesChannelRoutes);
+app.use('/api/product-catalogs', verifyRequest, productCatalogRoutes);
 
 // Serve static files in production
 if (process.env.NODE_ENV === 'production') {

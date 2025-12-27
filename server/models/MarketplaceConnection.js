@@ -53,6 +53,16 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT,
       allowNull: true,
       field: 'error_message'
+    },
+    salesChannelId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      field: 'sales_channel_id',
+      references: {
+        model: 'sales_channels',
+        key: 'id'
+      },
+      comment: 'Optional link to a sales channel for advanced configuration'
     }
   }, {
     tableName: 'marketplace_connections',
@@ -68,6 +78,11 @@ module.exports = (sequelize, DataTypes) => {
     MarketplaceConnection.hasMany(models.ProductListing, {
       foreignKey: 'connection_id',
       as: 'productListings'
+    });
+    // Link to SalesChannel for advanced channel management
+    MarketplaceConnection.belongsTo(models.SalesChannel, {
+      foreignKey: 'sales_channel_id',
+      as: 'salesChannel'
     });
   };
 

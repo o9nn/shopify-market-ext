@@ -9,6 +9,8 @@ import Products from './pages/Products';
 import Orders from './pages/Orders';
 import Marketplaces from './pages/Marketplaces';
 import Settings from './pages/Settings';
+import SalesChannels from './pages/SalesChannels';
+import ProductCatalogs from './pages/ProductCatalogs';
 import Navigation from './components/Navigation';
 
 function App() {
@@ -66,6 +68,8 @@ function App() {
               <Route path="/products" element={<Products />} />
               <Route path="/orders" element={<Orders />} />
               <Route path="/marketplaces" element={<Marketplaces />} />
+              <Route path="/sales-channels" element={<SalesChannels />} />
+              <Route path="/product-catalogs" element={<ProductCatalogs />} />
               <Route path="/settings" element={<Settings />} />
             </Routes>
           </main>

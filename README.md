@@ -5,6 +5,9 @@ A comprehensive Shopify sales channel app for managing multi-marketplace integra
 ## Features
 
 - **Multi-Marketplace Integration**: Connect to Amazon, eBay, Walmart, Target Plus, and Etsy
+- **Sales Channel Management**: Create custom sales channels with B2B-style tenant management
+- **Product Catalog System**: Organize products into catalogs with specific pricing and filters
+- **Many-to-Many Architecture**: Link tenants, channels, and catalogs similar to B2B company structures
 - **Product Listing Management**: Create and sync product listings across all connected marketplaces
 - **Order Management**: View and manage orders from all channels in one place
 - **Inventory Sync**: Automatic inventory synchronization across all platforms
@@ -41,12 +44,18 @@ shopify-market-test/
 │   │   ├── Session.js       # Session storage
 │   │   ├── MarketplaceConnection.js
 │   │   ├── ProductListing.js
-│   │   └── Order.js
+│   │   ├── Order.js
+│   │   ├── SalesChannel.js  # Custom sales channels
+│   │   ├── ProductCatalog.js # Product catalogs
+│   │   ├── ChannelCatalogLink.js # M2M channel-catalog
+│   │   └── TenantChannelLink.js  # M2M tenant-channel
 │   ├── routes/
 │   │   ├── auth.js          # Authentication routes
 │   │   ├── products.js      # Product management
 │   │   ├── orders.js        # Order management
 │   │   ├── marketplace.js   # Marketplace connections
+│   │   ├── salesChannels.js # Sales channel management
+│   │   ├── productCatalogs.js # Catalog management
 │   │   └── webhooks.js      # Shopify webhooks
 │   ├── services/
 │   │   ├── ShopifyService.js
@@ -65,6 +74,8 @@ shopify-market-test/
 │   │   │   ├── Products.jsx
 │   │   │   ├── Orders.jsx
 │   │   │   ├── Marketplaces.jsx
+│   │   │   ├── SalesChannels.jsx
+│   │   │   ├── ProductCatalogs.jsx
 │   │   │   └── Settings.jsx
 │   │   ├── hooks/
 │   │   │   └── useApi.js
@@ -170,6 +181,26 @@ shopify-market-test/
 - `GET /api/marketplace/supported` - Get supported marketplaces
 - `GET /api/marketplace/dashboard` - Dashboard data
 
+### Sales Channels
+- `GET /api/sales-channels` - Get all sales channels
+- `GET /api/sales-channels/:id` - Get single channel with details
+- `POST /api/sales-channels` - Create new sales channel
+- `PUT /api/sales-channels/:id` - Update sales channel
+- `DELETE /api/sales-channels/:id` - Delete sales channel
+- `POST /api/sales-channels/:id/catalogs` - Link catalog to channel
+- `DELETE /api/sales-channels/:id/catalogs/:catalogId` - Unlink catalog
+- `POST /api/sales-channels/:id/tenants` - Link tenant to channel
+- `PUT /api/sales-channels/:id/tenants/:shopId` - Update tenant link
+- `DELETE /api/sales-channels/:id/tenants/:shopId` - Unlink tenant
+
+### Product Catalogs
+- `GET /api/product-catalogs` - Get all catalogs
+- `GET /api/product-catalogs/:id` - Get single catalog with details
+- `POST /api/product-catalogs` - Create new catalog
+- `PUT /api/product-catalogs/:id` - Update catalog
+- `DELETE /api/product-catalogs/:id` - Delete catalog
+- `GET /api/product-catalogs/:id/products` - Get catalog products
+
 ### Webhooks
 - `POST /api/webhooks/app/uninstalled` - App uninstall
 - `POST /api/webhooks/orders/create` - New order
@@ -201,6 +232,31 @@ Required credentials:
 ### Walmart (Coming Soon)
 ### Target Plus (Coming Soon)
 ### Etsy (Coming Soon)
+
+## Sales Channel Architecture
+
+This app implements a sophisticated M2M (many-to-many) architecture inspired by Shopify's B2B company structure, enabling advanced marketplace and channel management.
+
+### Key Concepts
+
+1. **Sales Channels**: Represent different selling environments (marketplaces, retail, wholesale, B2B)
+2. **Product Catalogs**: Group products with specific filters and pricing strategies
+3. **Tenant Links**: Connect Shopify stores (tenants) to channels with role-based permissions
+4. **Catalog Links**: Associate catalogs with channels for product availability control
+
+### Architecture Benefits
+
+- **Flexible Configuration**: Each channel can have multiple catalogs with different pricing
+- **Role-Based Access**: Tenants can be assigned as owners, managers, or viewers
+- **Centralized Management**: Administer all channels from a B2B-style interface
+- **Scalable Design**: Support complex multi-tenant, multi-marketplace scenarios
+
+### Use Cases
+
+- **Multi-Brand Retailers**: Manage different product lines across various marketplaces
+- **B2B Wholesalers**: Create customer-specific catalogs with custom pricing
+- **Seasonal Campaigns**: Deploy promotional catalogs to specific channels
+- **Regional Distribution**: Configure location-based channel and catalog assignments
 
 ## Development
 
